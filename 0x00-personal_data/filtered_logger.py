@@ -3,7 +3,9 @@
 """
 
 import re
+import mysql
 import logging
+from os import environ
 from typing import List
 
 
@@ -33,6 +35,21 @@ def get_logger() -> logging.Logger:
     logger.addHandler(stream_handler)
 
     return logger
+
+
+def get_db() -> mysql.connector.connection.MySQLConnection:
+    """ Get info from mysql db
+    """
+    user = environ.get('PERSONAL_DATA_DB_USERNAME')
+    pwd = environ.get('PERSONAL_DATA_DB_PASSWORD')
+    host = environ.get('PERSONAL_DATA_DB_HOST')
+    db_name = environ.get('PERSONAL_DATA_DB_NAME')
+    # MySQL connection object
+    cnx = mysql.connector.connection.MySQLConnection(user=user,
+                                                     password=pwd,
+                                                     host=host,
+                                                     database=db_name)
+    return cnx
 
 
 class RedactingFormatter(logging.Formatter):
