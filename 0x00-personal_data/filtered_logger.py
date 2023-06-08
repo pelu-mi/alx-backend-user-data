@@ -3,10 +3,10 @@
 """
 
 import re
-import mysql.connector
 import logging
 from os import environ
 from typing import List
+import mysql.connector
 
 
 PII_FIELDS = ("name", "email", "phone", "ssn", "password")
@@ -70,3 +70,26 @@ class RedactingFormatter(logging.Formatter):
         record.msg = filter_datum(self.fields, self.REDACTION,
                                   record.getMessage(), self.SEPARATOR)
         return super(RedactingFormatter, self).format(record)
+
+
+def main() -> None:
+    """ Main function
+    """
+    db = get_db()
+    cursor = db.cursor()
+    cursor.execute("SELECT * FROM users;")
+    fields = [row[0] for row in cursor.description]
+
+    logger = get_logger()
+
+    for row in cursor:
+        row_str = "".join("{}={}; ".format(f, str(r)) for r, f in zip(row,
+                                                                   fields))
+        logger.info(row_str.strip())
+
+    cursor.close()
+    db.close()
+
+
+if __name__ == "__main__":
+    main()
