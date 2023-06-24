@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """ Module to implement Session Auth with expiration time
 """
-from api/v1/views/session_auth.py import SessionAuth
+from api.v1.views.session_auth import SessionAuth
 from os import getenv
 from datetime import datetime, timedelta
 
