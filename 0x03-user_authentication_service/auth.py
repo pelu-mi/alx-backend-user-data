@@ -49,3 +49,14 @@ class Auth:
                                   user.hashed_password)
         except (NoResultFound, InvalidRequestError):
             return False
+
+    def create_session(self, email: str) -> str:
+        """ Create DB session
+        """
+        try:
+            user = self._db.find_user_by(email=email)
+        except NoResultFound:
+            return None
+
+        self._db.update_user(user.id, session_id=_generate_uuid())
+        return user.session_id
