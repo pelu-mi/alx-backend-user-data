@@ -49,7 +49,6 @@ def profile_logged(session_id: str) -> None:
     """
     r = requests.post('{}/profile'.format(url),
                       cookies={'session_id': session_id})
-    # print(r.status_code)
     assert r.status_code == 200
 
 
@@ -57,7 +56,7 @@ def log_out(session_id: str) -> None:
     """ Test logging out
     """
     r = requests.delete('{}/sessions'.format(url),
-                      cookies={'session_id': session_id})
+                        cookies={'session_id': session_id})
     if r.status_code == 302:
         assert r.url == 'http://127.0.0.1:5000/'
     else:
