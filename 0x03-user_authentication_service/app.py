@@ -60,6 +60,7 @@ def profile() -> str:
     """ GET /profile
     """
     session_id = request.cookies.get('session_id')
+    user = AUTH.get_user_from_session_id(session_id)
     if user is None:
         abort(403)
     return jsonify({"email": user.email}), 200
